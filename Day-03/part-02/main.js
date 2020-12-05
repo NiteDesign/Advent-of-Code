@@ -48,9 +48,9 @@ for (var s = 0; s < arraySlopes.length; s++) {
   treeArray.push(numTrees);
 }
 
-var treeTotal = Number(treeArray[0]);
+var treeTotal = 1;
 console.log("Tree Count: " + treeArray[0]);
-for (var t = 1; t < treeArray.length; t++) {
+for (var t = 0; t < treeArray.length; t++) {
   console.log("Tree Count: " + treeArray[t]);
   treeTotal = treeTotal * treeArray[t];
 }
