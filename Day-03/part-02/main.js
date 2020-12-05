@@ -16,31 +16,34 @@ const fs = require('fs')
 
 var arrayData = fs.readFileSync('input.txt').toString().split("\n");
 
-var numTrees = 0;
-var x = 0;
 var treeArray = [];
 var arraySlopes = [
-  ["1","1"],
-  ["3","1"],
-  ["5","1"],
-  ["7","1"],
+  // ["1","1"],
+  // ["3","1"],
+  // ["5","1"],
+  // ["7","1"],
   ["1","2"]
 ]
+
 // Get each array item and iterate
 
 for (var s = 0; s < arraySlopes.length; s++) {
   var numTrees = 0;
-  var xIncrement = Number(arraySlopes[s][0]);
-  var yIncrement = Number(arraySlopes[s][1]);
-
+  var slopeX = Number(arraySlopes[s][0]);
+  var slopeY = Number(arraySlopes[s][1]);
   var x = 0;
-  for (var y = yIncrement; y < arrayData.length; y = y + yIncrement) {
-    x = x + xIncrement;
-    repeatMap = Math.ceil(x / arrayData[y].length);
-    console.log("X: " + x);
-    console.log("Y: " + y);
-    var map = extendMap(arrayData[y], repeatMap, x);
-    var mapObject = map.charAt(x);
+  var mapData = "";
+  for (var y = slopeY; y < arrayData.length; y = y + slopeY) {
+    x = x + slopeX;
+    str = arrayData[y].replace(/\r?\n|\r/g, "");
+    mapData = str;
+    do{
+      mapData += mapData;
+    }
+    while(x > mapData.length);
+    var mapObject = mapData.charAt(x);
+    // console.log(mapData);
+    // console.log("Object: " + mapObject);
     if(mapObject == "#"){
       numTrees += 1;
     }
@@ -49,20 +52,9 @@ for (var s = 0; s < arraySlopes.length; s++) {
 }
 
 var treeTotal = 1;
-console.log("Tree Count: " + treeArray[0]);
 for (var t = 0; t < treeArray.length; t++) {
   console.log("Tree Count: " + treeArray[t]);
   treeTotal = treeTotal * treeArray[t];
-}
-
-function extendMap(str, repeatMap, mapPos){
-  var newMap = "";
-  repeatMap++;
-  for(var i = 0; i < repeatMap; i++){
-    str = str.replace(/\r?\n|\r/g, "");
-    newMap = newMap + str;
-  }
-  return newMap;
 }
 
 console.log("Total Trees: " + treeTotal);
