@@ -25,48 +25,32 @@ let enableMultiply = true;
 let inputData = fs.readFileSync('input.txt').toString();
 
 //Regex search
-let mulArray = inputData.match(/mul\(\d*,\d*\)/g);
+let mulArray = inputData.match(/mul\(\d*,\d*\)|do\(\)|don\'t\(\)/g);
 
-let enableMultiplier = inputData.match(/do\(\)/g);
-let disableMultiplier = inputData.match(/don\'t\(\)/g);
-
-
-var regexMultipliers = /mul\(\d*,\d*\)/g, result, indicesMultipliers = [];
-while ( (result = regexMultipliers.exec(inputData)) ) {
-    indicesMultipliers.push(result.index);
-}
-
-var regexEnabled = /do\(\)/g, result, indicesEnabled = [];
-while ( (result = regexEnabled.exec(inputData)) ) {
-    indicesEnabled.push(result.index);
-}
-
-var regexDisabled = /don\'t\(\)/g, result, indicesDisabled = [];
-while ( (result = regexDisabled.exec(inputData)) ) {
-    indicesDisabled.push(result.index);
-}
-
-console.log(indicesEnabled);
-console.log(indicesDisabled);
-console.log(indicesMultipliers);
+console.log("Multiplier " + mulArray);
 
 mulArray.forEach(multiplyInstructions);
-
-
 function multiplyInstructions(data) {
 
-  data = data.replace("mul(", "");
-  data = data.replace(")", "");
-  let numbers = data.split(",");
+  if (data == "don't()"){
+    enableMultiply = false;
+  }
 
-  let x = (numbers[0] * numbers[1]);
+  if (data == "do()"){
+    enableMultiply = true;
+  }
 
-  resultTotal = resultTotal + x;
+  if (enableMultiply == true && data.includes("mul")){
+    data = data.replace("mul(", "");
+    data = data.replace(")", "");
+    let numbers = data.split(",");
+
+    let x = (numbers[0] * numbers[1]);
+
+    resultTotal = resultTotal + x;
+  }
+
 }
 
-
-//GET all values of:  mul(X,Y)
-
 console.log(resultTotal);
-
 
