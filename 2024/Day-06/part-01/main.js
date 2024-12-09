@@ -1,110 +1,143 @@
 
 const fs = require('fs')
 
-let distinctPositions = 0;
+var distinctPositions = 0;
 
 //Load input txt
-let inputMap = fs.readFileSync('input.txt').toString().split("\n");
+var inputMap = fs.readFileSync('input.txt').toString().split("\n");
 
-let posX = 0;
-let posY = 0;
+var posX = 67;
+var posY = 89;
+
+console.log(inputMap[posY].charAt(posX));
 
 let movingDirection = "GoUp";
 
 
-//while (movingDirection != "Exit"){
-  switch (movingDirection){
+while (movingDirection !== "DONE"){
 
+  switch (movingDirection){
     case "GoUp":
-      console.log("Move Up");
-      movingDirection = moveUp(4,6);
-      console.log(movingDirection);
+      moveUp();
       break;
     case "GoDown":
-      console.log("Move Down");
-      movingDirection = moveDown(posX,posY);
+      moveDown();
       break;
     case "GoLeft":
-      console.log("Move Left");
-      movingDirection = moveLeft(posX,posY);
+      moveLeft();
       break;
     case "GoRight":
-      console.log("Move Right");
-      movingDirection = moveRight(posX,posY);
+      moveRight();
       break;
     case "Exit":
-      console.log("Exit");
+      console.log(distinctPositions);
+      movingDirection = "DONE";
       break;
   }
-  console.log("end while, run again");
-//}
 
-
-function moveRight(posX, posY){
-  for (let x = posX; x < inputMap[posY].length; x++) {
-    console.log("Moving Right");
-
-    if (inputMap[posY].charAt(x) == "."){
-      distinctPositions = distinctPositions + 1;
-      inputMap = inputMap[posY].substring(0,x)+'X'+inputMap[posY].substring(x+1);
-    }
-
-    if (inputMap[posY].charAt(x) == "#"){
-      return "GoDown"
-    }
-  }
 }
 
-function moveDown(posX, posY){
 
-  for (let y = posY; y < inputMap.length; y++) {
-    console.log("Moving Down");
+
+function moveRight(){
+
+    for (let x = posX; x < inputMap[posY].length + 2; x++) {
+
+      if (x == inputMap[posY].length + 1){
+        movingDirection = "Exit";
+        break;
+        return;
+      }
+
+
+      if (inputMap[posY].charAt(x) == "."){
+        distinctPositions = distinctPositions + 1;
+        let inputMapx = inputMap[posY].substring(0,x)+'X'+inputMap[posY].substring(x+1);
+        inputMap[posY] = inputMapx;
+      }
+
+      if (inputMap[posY].charAt(x) == "#"){
+        posX = x - 1;
+        movingDirection = "GoDown";
+        return;
+      }
+    }
+
+
+}
+
+function moveDown(){
+
+  for (let y = posY; y < inputMap.length + 1; y++) {
+
+    if (y == inputMap.length){
+      movingDirection = "Exit";
+      break;
+      return;
+    }
+
     if (inputMap[y].charAt(posX) == "."){
       distinctPositions = distinctPositions + 1;
-      inputMap = inputMap[y].substring(0,posX)+'X'+inputMap[y].substring(posX+1);
+      let inputMapx = inputMap[y].substring(0,posX)+'X'+inputMap[y].substring(posX+1);
+      inputMap[y] = inputMapx;
     }
 
     if (inputMap[y].charAt(posX) == "#"){
-      return "GoLeft"
+      posY = y - 1;
+      movingDirection = "GoLeft";
+      return;
     }
   }
-
 }
 
-function moveLeft(posX, posY){
-  for (let x = posX; x < inputMap[posY].length; x--) {
-    console.log("Moving Left");
+function moveLeft(){
+
+
+  for (let x = posX; x > -2; x--) {
+
+    if (x == -1){
+      movingDirection = "Exit";
+      break;
+      return;
+    }
 
     if (inputMap[posY].charAt(x) == "."){
       distinctPositions = distinctPositions + 1;
-      inputMap = inputMap[posY].substring(0,x)+'X'+inputMap[posY].substring(x+1);
+      let inputMapx = inputMap[posY].substring(0,x)+'X'+inputMap[posY].substring(x+1);
+      inputMap[posY] = inputMapx;
     }
 
     if (inputMap[posY].charAt(x) == "#"){
-      return "GoUp"
+      posX = x + 1;
+      movingDirection = "GoUp";
+      return;
     }
   }
+
 }
 
-function moveUp(posX, posY){
+function moveUp(){
+  for (let y = posY; y > -2; y--) {
 
-
-  for (let y = posY; y > 0; y--) {
-
-    console.log(posY);
-    console.log(y);
-    console.log(inputMap[y]);
-    console.log(inputMap[y].charAt(posX));
+    if (y == -1){
+      movingDirection = "Exit";
+      break;
+      return;
+    }
 
     if (inputMap[y].charAt(posX) == "."){
-      console.log("Moving Up");
+
       distinctPositions = distinctPositions + 1;
-      inputMap = inputMap[y].substring(0,posX)+'X'+inputMap[y].substring(posX+1);
+      let inputMapx = inputMap[y].substring(0,posX)+'X'+inputMap[y].substring(posX+1);
+      inputMap[y] = inputMapx;
+
     }
 
     if (inputMap[y].charAt(posX) == "#"){
-      console.log("-----------------Set MovingDirection--------------------");
+      posY = y + 1;
       movingDirection = "GoRight";
+      return;
     }
+
   }
 }
